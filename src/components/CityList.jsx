@@ -5,7 +5,6 @@ import Message from "./Message";
 import { useCities } from "../context/CitiesContext";
 function CityList() {
   const { cities, isLoading } = useCities();
-  console.log(cities);
   if (isLoading) return <Spinner />;
   if (cities.lenght === 0) return <Message message={"Add some Cities"} />;
   return (

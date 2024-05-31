@@ -18,6 +18,7 @@ const Homepage = lazy(() => import("./pages/Homepage"));
 const Product = lazy(() => import("./pages/Product"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Login = lazy(() => import("./pages/Login"));
+const SignUp = lazy(() => import("./pages/SignUp"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 const AppLayout = lazy(() => import("./components/AppLayout"));
 
@@ -39,6 +40,7 @@ function App() {
                 <Route path="form" element={<Form />} />
               </Route>
               <Route path="login" element={<Login />} />
+              <Route path="signup" element={<SignUp />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </Suspense>

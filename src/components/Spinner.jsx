@@ -1,9 +1,14 @@
 import styles from "./Spinner.module.css";
 
-function Spinner() {
+function Spinner({ width, height }) {
   return (
     <div className={styles.spinnerContainer}>
-      <div className={styles.spinner}></div>
+      <div         
+        style={{
+          width: `${width ? width : ""}`,
+          height: `${height ? height : ""}`,
+        }} 
+        className={styles.spinner}></div>
     </div>
   );
 }

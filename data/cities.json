@@ -1,52 +1,43 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
-      "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
-      },
-      "id": "73930385"
+      "id": "0",
+      "userCities": []
     },
     {
-      "cityName": "Madrid",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
-      "notes": "",
-      "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
-      },
-      "id": "17806751"
+      "id": "3210",
+      "userCities": []
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
-      "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
-      },
-      "id": "98443197"
+      "id": "5a36",
+      "userCities": []
     },
     {
-      "id": "8b49",
-      "cityName": "Alcoba",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2024-05-12T14:33:45.270Z",
-      "notes": "",
-      "position": {
-        "lat": "39.308800296002936",
-        "lng": "-4.449462890625001"
-      }
+      "id": "cxCCbJ2",
+      "userCities": []
+    }
+  ],
+  "users": [
+    {
+      "id": "0",
+      "userName": "Jack",
+      "email": "jack@example.com",
+      "password": "0000",
+      "avatar": "https://i.pravatar.cc/100?u=zz"
+    },
+    {
+      "id": "3210",
+      "userName": "Hamza",
+      "email": "hamza@example.com",
+      "password": "1",
+      "avatar": "https://i.pravatar.cc/100?u=zz"
+    },
+    {
+      "id": "5a36",
+      "userName": "sayed",
+      "email": "sayed@hotmail.com",
+      "password": "1234",
+      "avatar": "https://i.pravatar.cc/100?u=zz"
     }
   ]
 }

@@ -67,6 +67,7 @@ function Form() {
     useReducer(reducer, initialState);
   const [date, setdate] = useState(new Date());
   const [notes, setNotes] = useState("");
+  const [loading, setLoading] = useState(false)
   useEffect(
     function () {
       if (!formLat && !formLng) return;
@@ -77,7 +78,6 @@ function Form() {
             `${BASE_URL}?latitude=${formLat}&longitude=${formLng}`
           );
           const data = await res.json();
-          console.log(data);
           if (data.countryCode === "")
             throw new Error("There is No City Here ,Click Some where Else");
           dispatch({
@@ -85,7 +85,7 @@ function Form() {
             payload: {
               cityName: data.city || data.locality,
               countryName: data.countryName,
-              emoji: convertToEmoji(data.countryCode),
+              emoji: data.countryCode,
             },
           });
         } catch (err) {
@@ -109,9 +109,11 @@ function Form() {
       date,
       notes,
       position: { lat: formLat, lng: formLng },
+      id: new Date().toString()
     };
-    console.log(newCity);
+    setLoading(true);
     await postCity(newCity);
+    setLoading(false);
     navigate("/app/cities");
   }
 
@@ -154,7 +156,7 @@ function Form() {
       </div>
 
       <div className={styles.buttons}>
-        <Button type="primary">Add</Button>
+        <Button type="primary">{isLoading ? <Spinner width={'2rem'} height = {'2rem'} /> : 'Add'}</Button>
         <Button
           type="back"
           onClick={(e) => {
