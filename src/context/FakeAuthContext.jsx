@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 
 // const BASE_URL = "http://localhost:9000/users"; for local host
 const BASE_URL = "https://data-acyk.onrender.com/users";
-const CITY_BASE_URL = 'https://data-acyk.onrender.com'
+const CITY_BASE_URL = "https://data-acyk.onrender.com";
 const AuthContext = createContext();
 const initialState = {
   isAuth: false,
@@ -30,6 +30,7 @@ function reducer(state, action) {
       return {
         ...state,
         user: action.payload,
+        users: [...state.users, action.payload],
         isAuth: true,
         isLoading: false,
       };
@@ -64,10 +65,8 @@ function reducer(state, action) {
 }
 
 function AuthProvider({ children }) {
-  const [{ isAuth, user, users, errorMessage , isLoading }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ isAuth, user, users, errorMessage, isLoading }, dispatch] =
+    useReducer(reducer, initialState);
 
   useEffect(function () {
     async function fetchUsers() {
@@ -123,6 +122,8 @@ function AuthProvider({ children }) {
         id: data.id,
         userCities: [],
       };
+
+      dispatch({ type: "user/created", payload: data });
       try {
         const res = await fetch(`http://localhost:9000/cities`, {
           method: "POST",
@@ -132,7 +133,6 @@ function AuthProvider({ children }) {
           },
         });
       } catch {}
-      dispatch({ type: "user/created", payload: data });
     } catch (error) {
       dispatch({ type: "error", payload: error.message });
     } finally {
@@ -151,7 +151,7 @@ function AuthProvider({ children }) {
         user,
         isAuth,
         errorMessage,
-        isLoading
+        isLoading,
       }}
     >
       {children}
