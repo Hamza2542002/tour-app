@@ -9,7 +9,7 @@ import {
 import { useAuth } from "./FakeAuthContext";
 const CitiesContext = createContext();
 // const BASE_URL = 'http://localhost:9000/cities';
-const BASE_URL = 'https://data-acyk.onrender.com/cities';
+const BASE_URL = "https://data-acyk.onrender.com/cities";
 function reducer(state, action) {
   switch (action.type) {
     case "loading":
@@ -123,12 +123,12 @@ function CitiesProvider({ children }) {
 
       const res = await fetch(`${BASE_URL}/${user.id}`, {
         method: "PATCH",
-        body: JSON.stringify({id: user.id, userCities: [...cities, newCity]}),
+        body: JSON.stringify({ id: user.id, userCities: [...cities, newCity] }),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const data = await res.json();
+      await res.json();
       dispatch({ type: "city/created", payload: newCity });
     } catch {
       dispatch({ type: "rejected", payload: "Error Adding City" });
@@ -144,9 +144,12 @@ function CitiesProvider({ children }) {
       //     "Content-Type": "application/json",
       //   },
       // });
-      const res = await fetch(`${BASE_URL}/${user.id}`, {
+      await fetch(`${BASE_URL}/${user.id}`, {
         method: "PATCH",
-        body: JSON.stringify({id: user.id, userCities: [...cities.filter((city) => city.id !== id)]}),
+        body: JSON.stringify({
+          id: user.id,
+          userCities: [...cities.filter((city) => city.id !== id)],
+        }),
         headers: {
           "Content-Type": "application/json",
         },

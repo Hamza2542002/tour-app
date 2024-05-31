@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 
 // const BASE_URL = "http://localhost:9000/users"; for local host
 const BASE_URL = "https://data-acyk.onrender.com/users";
-const CITY_BASE_URL = "https://data-acyk.onrender.com";
+const CITY_BASE_URL = "https://data-acyk.onrender.com/cities";
 const AuthContext = createContext();
 const initialState = {
   isAuth: false,
@@ -68,22 +68,25 @@ function AuthProvider({ children }) {
   const [{ isAuth, user, users, errorMessage, isLoading }, dispatch] =
     useReducer(reducer, initialState);
 
-  useEffect(function () {
-    async function fetchUsers() {
-      dispatch({ type: "waiting", payload: true });
-      try {
-        const res = await fetch(`${BASE_URL}`);
-        // const res = await fetch("https://data-acyk.onrender.com/users");
-        const data = await res.json();
-        dispatch({ type: "users/loaded", payload: data });
-      } catch {
-        dispatch({ type: "rejeted", payload: "Cannot Fetch data" });
-      } finally {
-        dispatch({ type: "waiting", payload: false });
+  useEffect(
+    function () {
+      async function fetchUsers() {
+        dispatch({ type: "waiting", payload: true });
+        try {
+          const res = await fetch(`${BASE_URL}`);
+          // const res = await fetch("https://data-acyk.onrender.com/users");
+          const data = await res.json();
+          dispatch({ type: "users/loaded", payload: data });
+        } catch {
+          dispatch({ type: "rejeted", payload: "Cannot Fetch data" });
+        } finally {
+          dispatch({ type: "waiting", payload: false });
+        }
       }
-    }
-    fetchUsers();
-  }, []);
+      fetchUsers();
+    },
+    [user]
+  );
 
   function login(email, password) {
     dispatch({ type: "error", payload: "" });
@@ -101,7 +104,7 @@ function AuthProvider({ children }) {
     dispatch({ type: "waiting", payload: true });
     dispatch({ type: "error", payload: "" });
     const user = users?.filter((item) => item.email === newUser?.email)[0];
-    if (user != undefined) {
+    if (user !== undefined) {
       dispatch({
         type: "error",
         payload: "This User has been rejestered before",
@@ -124,8 +127,9 @@ function AuthProvider({ children }) {
       };
 
       dispatch({ type: "user/created", payload: data });
+      console.log(users);
       try {
-        const res = await fetch(`http://localhost:9000/cities`, {
+        await fetch(`${CITY_BASE_URL}`, {
           method: "POST",
           body: JSON.stringify(newCityData),
           headers: {
