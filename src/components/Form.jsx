@@ -67,7 +67,8 @@ function Form() {
     useReducer(reducer, initialState);
   const [date, setdate] = useState(new Date());
   const [notes, setNotes] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [city, setCityName] = useState("");
+  const [loading, setLoading] = useState(false);
   useEffect(
     function () {
       if (!formLat && !formLng) return;
@@ -109,7 +110,7 @@ function Form() {
       date,
       notes,
       position: { lat: formLat, lng: formLng },
-      id: new Date().toString()
+      id: new Date().toString(),
     };
     setLoading(true);
     await postCity(newCity);
@@ -130,7 +131,7 @@ function Form() {
         <label htmlFor="cityName">City name</label>
         <input
           id="cityName"
-          // onChange={(e) => setCityName(e.target.value)}
+          onChange={(e) => setCityName(e.target.value)}
           value={cityName}
         />
         <span className={styles.flag}>{emoji}</span>
@@ -156,7 +157,9 @@ function Form() {
       </div>
 
       <div className={styles.buttons}>
-        <Button type="primary">{isLoading ? <Spinner width={'2rem'} height = {'2rem'} /> : 'Add'}</Button>
+        <Button type="primary">
+          {isLoading ? <Spinner width={"2rem"} height={"2rem"} /> : "Add"}
+        </Button>
         <Button
           type="back"
           onClick={(e) => {

@@ -8,11 +8,11 @@ import Spinner from "../components/Spinner";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, isAuth, errorMessage, waiting } = useAuth();
+  const { login, isAuth, errorMessage, isLoading } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(errorMessage);
+  const [error, setError] = useState("");
 
   useEffect(
     function () {
@@ -24,7 +24,7 @@ export default function Login() {
   async function handleLogin(e) {
     e.preventDefault();
     if (email && password) {
-      await login(email, password);
+      login(email, password);
       setError(errorMessage);
     }
   }
@@ -51,14 +51,19 @@ export default function Login() {
           <input
             type="password"
             id="password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setError("");
+              setPassword(e.target.value);
+            }}
             value={password}
           />
         </div>
-        {error && <p className={styles.error}>{errorMessage}</p>}
+        {errorMessage && (
+          <p className={styles.error}>{error || errorMessage}</p>
+        )}
         <div>
-          <Button type="primary" onClick={handleLogin}>
-            {waiting ? <Spinner width="3rem" height="3rem" /> : "Login"}
+          <Button type="primary" disabled={isLoading} onClick={handleLogin}>
+            {isLoading ? <Spinner width="3rem" height="3rem" /> : "Login"}
           </Button>
           <p className={styles.link}>
             Dont't have account?

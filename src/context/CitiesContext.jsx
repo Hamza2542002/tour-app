@@ -8,7 +8,6 @@ import {
 
 import { useAuth } from "./FakeAuthContext";
 const CitiesContext = createContext();
-// const BASE_URL = 'http://localhost:9000/cities';
 const BASE_URL = "https://data-acyk.onrender.com/cities";
 function reducer(state, action) {
   switch (action.type) {
@@ -74,7 +73,6 @@ function CitiesProvider({ children }) {
         dispatch({ type: "loading" });
         try {
           const res = await fetch(`${BASE_URL}/${user.id}`);
-          // const res = await fetch("https://data-acyk.onrender.com/cities");
           const data = await res.json();
           dispatch({ type: "cities/loaded", payload: data.userCities ?? [] });
         } catch {
@@ -91,11 +89,6 @@ function CitiesProvider({ children }) {
       if (id === currentCity.id) return;
       dispatch({ type: "loading" });
       try {
-        // const res = await fetch(`http://localhost:9000/cities/${id}`);
-        // const res = await fetch(`https://data-acyk.onrender.com/cities/${id}`);
-        // const data = await res.json();
-        // dispatch({ type: "city/loaded", payload: data });
-
         const city = cities?.filter((city) => city.id === id)[0];
         if (!city || city === undefined) {
           throw new Error();
@@ -112,15 +105,6 @@ function CitiesProvider({ children }) {
   async function postCity(newCity) {
     dispatch({ type: "loading" });
     try {
-      // const res = await fetch(`http://localhost:9000/cities`, {
-      // const res = await fetch(`https://data-acyk.onrender.com/cities`, {
-      //   method: "POST",
-      //   body: JSON.stringify(newCity),
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-
       const res = await fetch(`${BASE_URL}/${user.id}`, {
         method: "PATCH",
         body: JSON.stringify({ id: user.id, userCities: [...cities, newCity] }),
@@ -137,13 +121,6 @@ function CitiesProvider({ children }) {
   async function deleteCity(id) {
     dispatch({ type: "loading" });
     try {
-      // await fetch(`http://localhost:9000/cities/${id}`, {
-      // await fetch(`https://data-acyk.onrender.com/cities/${id}`, {
-      //   method: "DELETE",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
       await fetch(`${BASE_URL}/${user.id}`, {
         method: "PATCH",
         body: JSON.stringify({

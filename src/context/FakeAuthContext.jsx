@@ -23,6 +23,7 @@ function reducer(state, action) {
       return {
         ...state,
         user: action.payload,
+        users: [...state.users, action.payload],
         isAuth: true,
       };
     }
@@ -30,11 +31,19 @@ function reducer(state, action) {
       return {
         ...state,
         user: action.payload,
-        users: [...state.users, action.payload],
         isAuth: true,
         isLoading: false,
+        errorMessage: "",
       };
     }
+    case "login/failed":
+      return {
+        ...state,
+        isAuth: false,
+        user: null,
+        isLoading: false,
+        errorMessage: action.payload,
+      };
     case "logout": {
       return {
         ...state,
@@ -52,6 +61,8 @@ function reducer(state, action) {
       return {
         ...state,
         errorMessage: action.payload,
+        isAuth: false,
+        isLoading: false,
       };
     }
     case "waiting":
@@ -67,14 +78,12 @@ function reducer(state, action) {
 function AuthProvider({ children }) {
   const [{ isAuth, user, users, errorMessage, isLoading }, dispatch] =
     useReducer(reducer, initialState);
-
   useEffect(
     function () {
       async function fetchUsers() {
         dispatch({ type: "waiting", payload: true });
         try {
           const res = await fetch(`${BASE_URL}`);
-          // const res = await fetch("https://data-acyk.onrender.com/users");
           const data = await res.json();
           dispatch({ type: "users/loaded", payload: data });
         } catch {
@@ -92,12 +101,17 @@ function AuthProvider({ children }) {
     dispatch({ type: "error", payload: "" });
     dispatch({ type: "waiting", payload: true });
     const user = users?.filter((item) => item.email === email)[0];
-    if (!user || user === undefined) {
-      dispatch({ type: "error", payload: "No Account with this email" });
+    if (email !== user?.email) {
+      dispatch({ type: "login/failed", payload: "Email Not Found" });
       return;
     }
-    if (email === user.email && password === user.password)
+    if (password !== user?.password) {
+      dispatch({ type: "login/failed", payload: "Password is not correct" });
+      return;
+    }
+    if (email === user?.email && password === user?.password)
       dispatch({ type: "login", payload: user });
+    return;
   }
 
   async function signup(newUser) {
@@ -127,7 +141,6 @@ function AuthProvider({ children }) {
       };
 
       dispatch({ type: "user/created", payload: data });
-      console.log(users);
       try {
         await fetch(`${CITY_BASE_URL}`, {
           method: "POST",
@@ -143,9 +156,11 @@ function AuthProvider({ children }) {
       dispatch({ type: "waiting", payload: false });
     }
   }
+
   function logout() {
     if (isAuth) dispatch({ type: "logout" });
   }
+
   return (
     <AuthContext.Provider
       value={{
